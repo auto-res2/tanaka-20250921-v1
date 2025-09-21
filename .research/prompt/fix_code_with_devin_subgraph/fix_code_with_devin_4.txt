@@ -1,0 +1,338 @@
+
+Input:
+# Instruction
+The error in "# Error" occurred when executing main.py. Please modify the code and push the revised code to the remote repository.
+Perform the modifications with reference to the rules specified in "# Rules".
+
+Additionally, # Information contains details about the implemented code.
+Please ensure that the implementation enables experiments for the new method described in ## Current Research Method.
+
+Do not create a new branch under any circumstances; commit the changes to the specified branch.
+
+# Rules
+- Fix all errors found in the error messages
+-The following files used in the experiment are listed along with their descriptions. Under no circumstances should you modify any files other than these or add new files.
+    - config...Create two configuration files:
+        - smoke_test.yaml: Small-scale configuration for quick validation (reduced epochs like 1-2, smaller datasets, limited iterations)
+        - full_experiment.yaml: Full-scale configuration for complete experimental runs
+    - data...This directory is used to store data used for model training and evaluation.
+    - models...This directory is used to store pre-trained and trained models.
+    - src
+        - train.py...Extract all functions and classes related to model.
+        - evaluate.py...Extract all functions and classes related to model evaluation, statistical analysis, and plotting. Please implement the code so that the evaluation results are always output to standard output.
+        - preprocess.py...Extract any data loading or preprocessing logic.
+        - main.py...Create the main execution script with command-line argument support:
+            - Please make sure to always create main.py.
+            - Add argparse to handle --smoke-test and --full-experiment flags
+            - Load appropriate config file based on the flag (smoke_test.yaml or full_experiment.yaml)
+            - Use relative imports (e.g., `from .train import ...`) to orchestrate the experimental workflow
+            - Implement two-phase execution: smoke test first, then full experiment if smoke test passes
+            - Use PyYAML for configuration loading
+    - pyproject.toml...Analyze the "Experiment Code" header and import statements. Configure the project dependencies and package information in TOML format.
+                        Dependencies must be an array format like `dependencies = ["numpy>=1.21.0", "torch>=1.9.0"]`, NOT a mapping format like `[project.dependencies]` with key-value pairs.
+- When executing the script, ensure that the following information is always printed to standard output.If there are multiple experiments, this standard output must be produced for each experiment.
+    - Experiment details
+    - Concrete numerical data
+    - File path of the figure visualizing the experimental results
+- If the required Python packages are missing, modify the pyproject.toml file so that they can be installed.
+- Be sure to perform a test run and confirm that it executes successfully. The test run should be designed to complete within a short execution time. Implement the test execution so that it can be run as a smoke test.
+- If the deep learning models or datasets being used are unavailable, please select alternatives from "External Resources" and implement them.
+- If similar errors appear in the Previous Error History, consider alternative approaches rather than repeating the same fixes
+- Update pyproject.toml if new packages needed
+- MANDATORY: You must update paths before saving. The following paths are required:
+    - Image paths: .research/iteration4/images (modify any existing image save paths to use this exact directory)
+    - JSON paths: .research/iteration4/ (Save each experiment's results as separate JSON files in this directory and print each JSON contents to standard output for verification)
+    - Do not push the .research/iteration4/ directory containing the test execution results to the remote repository; only update the implementation paths.
+
+## Command Line Execution Requirements
+The generated main.py must support the following command patterns:
+```bash
+# Smoke test only
+uv run python -m src.main --smoke-test
+
+# Full experiment only
+uv run python -m src.main --full-experiment
+```
+
+# Error:
+
+
+# Standard output:
+=== [PHASE 2/2] Full experiment start Sun Sep 21 02:21:20 PM UTC 2025 ===
+--- Running Full Experiment ---
+Loading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt
+Downloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …
+Pairs kept for HuggingFaceH4/ultrafeedback_binarized: 24621
+Downloading argilla/ultrafeedback-binarized-preferences-cleaned [train] …
+Pairs kept for argilla/ultrafeedback-binarized-preferences-cleaned: 23315
+Downloading Baidicoot/anthropic-harmless-rlhf [train] …
+Pairs kept for Baidicoot/anthropic-harmless-rlhf: 40851
+Downloading GBaker/MedQA-USMLE-4-options [train] …
+Pairs kept for GBaker/MedQA-USMLE-4-options: 10154
+
+# Previous Error History (for reference - avoid repeating same fixes)
+
+
+# Information
+
+## Experimental Environment
+NVIDIA A100
+VRAM：80GB
+RAM：2048 GB
+
+## Current Research Method:
+{
+    "Open Problems": "1. Existing preference-based fine-tuning losses rely on a hand-picked global temperature β and a hand-picked target KL κ.  Both have to be swept for every model, task and loss variant (logistic, exponential, LRML, etc.). 2. A single global coefficient is often sub-optimal: easy samples could benefit from aggressive optimisation (small β) while risky or out-of-distribution samples require a stronger KL leash (large β). 3. Because β and κ are uncoupled from the optimisation objective, current “KL-controller” heuristics offer no convergence guarantees and sometimes oscillate or diverge. 4. The community lacks a principled, yet easily implementable, mechanism that (i) learns β at the granularity that matters (per-sample or per-token), (ii) removes any manual choice of κ, and (iii) provably keeps the fine-tuned policy inside a desired trust region while maximising preference reward.  Solving this would slash compute costs, reduce brittle hyper-parameter tuning, and improve safety during alignment.",
+    "Methods": "We propose C3PO – Constrained, Context-Aware, Control-theoretic Preference Optimisation.  C3PO generalises DPO/DiscoPOP with three new ingredients. 1. Dual-ascent KL regularisation: starting from the primal problem   max_π  E[R(π)]  s.t.  KL(π||π₀)≤κ_max   we introduce the Lagrangian L(π,β)=E[R]-β(KL-κ_max).  Updating β with projected stochastic dual ascent   β ← max(0, β + η (KL_b-κ_max))   yields a provable monotone approach to the optimal constrained solution (proof adapts Shalev-Shwartz ’12).  Unlike heuristic PID controllers, dual ascent provides convergence guarantees and removes the need to hand-pick a proportional gain. 2. Context-aware β network: instead of a single scalar, C3PO predicts a β_i for every training pair (or even every token) via a lightweight two-layer MLP that consumes cheap reference-only features: length, log-likelihood margin, reward model uncertainty (entropy), and a dataset ID embedding.  The MLP parameters θ are learned jointly with the policy by minimising the dual Lagrangian; gradients flow through β_i, letting the system discover where to loosen or tighten the KL leash. 3. Automatic κ_max via online Pareto detection: we start with κ_max=0 (strict imitation) and enlarge it multiplicatively whenever the validation reward plateaus while KL<0.8 κ_max.  This single rule eliminates any manual κ schedule. 4. Loss-agnostic wrapper: the scheme wraps any pairwise loss ℓ(ρ;β) that exposes a temperature (logistic, exponential, LRML).  Hence C3PO can self-tune DiscoPOP without re-discovering its own β.  Implementation is ~40 lines on top of existing DPO code.",
+    "Experimental Setup": "Datasets / tasks (same as original to enable fair comparison)   • Dialogue: AlpacaFarm, UltraFeedback.   • Summarisation: Reddit TL;DR.   • Sentiment: IMDb Positive steering.   • Safety: Anthropic Harmless.  Models   • Pythia-1.4B and Mistral-7B.  Baselines   • Best-grid DPO, SA-DPO (proportional control), DiscoPOP (β grid), PPO (KL controller).  Metrics   • Task reward metrics, MT-Bench, ROUGE, sentiment accuracy, harmlessness.   • Per-sample KL variance, mean β_i distribution entropy.   • Compute cost (# training runs, wall-clock).  Protocol   • All methods share optimiser, batch size, seeds.  • For C3PO:   – η_dual=0.05, κ_max initialised to 0, growth factor 1.5, β_i bounds [1e-3,10].   – MLP  hidden=16, parameters ≈3 K (negligible).  • Ablations:   (i) scalar β vs per-sample β_i,   (ii) dual ascent vs proportional,   (iii) automatic vs fixed κ_max,   (iv) DiscoPOP+ C3PO.  • Distribution-shift test: continue training dialogue-tuned model on TL;DR.  All experiments runnable on 8×A100 ≤ 48 h.",
+    "Experimental Code": "class C3POLoss(nn.Module):\n    \"\"\"Dual-ascent, context-aware β for preference fine-tuning.\"\"\"\n    def __init__(self, feat_dim=4, hidden=16, kappa_init=0.0, eta_beta=0.05,\n                 grow=1.5, beta_min=1e-3, beta_max=10.):\n        super().__init__()\n        self.kappa = kappa_init\n        self.grow = grow\n        self.eta = eta_beta\n        self.beta_min, self.beta_max = beta_min, beta_max\n        self.mlp = nn.Sequential(nn.Linear(feat_dim, hidden), nn.Tanh(),\n                                 nn.Linear(hidden, 1), nn.Softplus())  # outputs β_i>0\n    def forward(self, feats,  # [B,feat_dim] no grad needed\n                pi_c, pi_r, ref_c, ref_r):\n        # predict per-sample β_i\n        beta_i = self.mlp(feats).clamp(self.beta_min, self.beta_max).detach()\n        rho = (pi_c - pi_r) - (ref_c - ref_r)\n        loss = -F.logsigmoid(beta_i * rho)  # logistic form; swap to DiscoPOP if wanted\n        # dual ascent update (no grad)\n        with torch.no_grad():\n            kl_b = 0.5*((pi_c-ref_c).mean()+(pi_r-ref_r).mean())\n            self.mlp[-1].bias.data += 0  # keep for torchscript\n            dual_step = self.eta * (kl_b - self.kappa)\n            for p in self.mlp.parameters():\n                p.clamp_(-5,5)  # keep network stable\n            # enlarge kappa if reward plateaus (handled outside)\n        return loss.mean(), kl_b, beta_i.mean()",
+    "Expected Result": "1. C3PO matches or exceeds best-grid DPO reward on all tasks while using zero extra hyper-parameter sweeps. 2. Average KL is held within 5 % of the automatically grown κ_max and never exceeds it, confirming constraint satisfaction. 3. Per-sample β_i shows meaningful structure: higher on toxic or OOD inputs (safety), lower on benign in-distribution ones, validating context awareness. 4. Compared to SA-DPO, C3PO improves reward by 2–4 % while further reducing KL variance by 30 %. 5. On distribution shift, C3PO adapts in ≤200 steps without collapse, whereas fixed-β runs fail and SA-DPO overshoots before recovering. 6. Total GPU hours per task drop from ≈40 (grid) and 8 (SA-DPO single run) to ≈8 (C3PO single run, same as SA-DPO) with higher quality.",
+    "Expected Conclusion": "C3PO turns preference fine-tuning into a fully self-tuning, safety-aware constrained optimisation problem.  By embedding dual-ascent theory and a tiny context-aware β network, it removes all manual knobs (β, κ) yet offers stronger guarantees and better reward/KL trade-offs than heuristic controllers.  The method is loss-agnostic, drop-in, and scales to 7B models on commodity GPUs, lowering both the financial and environmental cost of aligning LLMs for diverse applications.  Future work: extend to per-token β_i, incorporate reward uncertainty into features, and study theoretical bounds on convergence rate in high-dimensional sequence spaces."
+}
+
+## Experiment Details:
+============================================
+EXPERIMENT 1 – “One-shot tuning vs. exhaustive sweeps”
+============================================
+1. Goal
+   Quantitatively show that a single C3PO run reaches or surpasses the best grid-searched baseline on reward/KL while reducing GPU cost by ≥5×.
+
+2. Models
+   • Pythia-1.4B (HF id: eleutherai/pythia-1.4b)
+   • Mistral-7B-Instruct (HF id: mistralai/Mistral-7B-Instruct)
+
+3. Datasets / Tasks
+   • AlpacaFarm (instruction-following dialogue, v1.0)  
+   • UltraFeedback (long-form dialogue, 2023-10 dump)  
+   • Reddit TL;DR (summarisation, 2020 cleaned split)  
+   • IMDb Positive Steering (sentiment re-writing, “IMDb-P” split)  
+   • Anthropic Harmless (safety, v0.5)
+
+4. Dataset preprocessing (common)
+   a) Deduplicate by SHA-1 over the raw prompt text.
+   b) Filter length 4–512 tokens (sentencepiece of base model).
+   c) Pairwise preference construction exactly as in DPO: each record contains (chosen, rejected) responses + prompt; discard if reward-model margin |ΔR|<0.05 to avoid label noise.
+   d) Tokenise with the model-specific tokenizer; truncate/pad to 512 tokens per string, pad to multiple of 8 for tensor cores.
+
+5. Data split
+   • 80 % train / 10 % validation / 10 % hold-out test.
+   • Same random seed (2023) for all methods to guarantee identical splits.
+
+6. Baselines & grids
+   a) DPO: β ∈ {0.1,0.2,0.4,0.8,1.6,3.2,6.4,10} (8 runs)  
+   b) DiscoPOP: β ∈ {0.05,0.1,0.2,0.5,1,2,3,5} (8 runs)  
+   c) PPO: KL-target κ ∈ {0.5,1,2,5} (4 runs)  
+   d) SA-DPO (single PID run, gains from original paper †).
+
+7. Optimiser & schedule (all methods)
+   • AdamW, lr=1 e-5, β₁=0.9, β₂=0.95, weight-decay 0.1  
+   • cosine schedule w/ 200 warm-up steps  
+   • batch size 128 preference pairs  
+   • 3 epochs over train split  
+   • gradient-accumulation 4 → effective batch 512  
+   • fp16 w. bfloat16 accumulate (Ampere).
+
+8. Seeds & repetition
+   • Seeds {42, 1234, 2023} (3 independent runs).   
+   • Report mean±95 %CI over seeds.   
+   • For each run store checkpoints each 500 optimisation steps.   
+   • Selection: “best-val” (highest validation reward) for final evaluation; also log last-epoch numbers to measure over-fit.
+
+9. Evaluation metrics
+   Primary:  
+   • Normalised reward (scale-matched to original RMs, higher=better).  
+   • Mean KL(π||π₀) on validation.  
+   Secondary:  
+   • ROUGE-L (TL;DR), sentiment accuracy (IMDb-P), MT-Bench overall (dialogue), Harmlessness rate (Anthropic safety classifier).  
+   • Runtime metrics: GPU-hours, wall-clock seconds per 1 k steps, peak VRAM.  
+   • Energy (J) via nvidia-smi –query-accounted.
+
+10. Hyper-parameter analysis
+    • For C3PO sweep η_dual ∈ {0.02, 0.05, 0.1} on AlpacaFarm only to confirm default choice, record its effect on convergence & KL.
+
+11. Robustness
+    • Add 5 % Gaussian noise to reward at training time; rerun best C3PO and best-grid DPO once, compare final reward drop.
+
+12. Compute tracking
+    • Log forward + backward FLOPs with ptflops; store JSON.  
+    • Wall-clock per step from time.time().  
+    • Memory from torch.cuda.max_memory_allocated().
+
+13. Expected runtime budget
+    • Per (task,model) C3PO: 8 h on single A100-80 GB.   
+    • Baseline grids: 8–12 runs ⇒ 40–60 h on identical GPU.
+
+14. Example code skeleton
+    ```python
+    from peft import prepare_model_for_kbit_training
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from accelerate import Accelerator
+    from c3po import C3POLoss
+    accelerator = Accelerator(log_with="wandb")
+    model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct", torch_dtype=torch.bfloat16)
+    tok = AutoTokenizer.from_pretrained(..., padding_side="left")
+    model = prepare_model_for_kbit_training(model)
+    loss_fn = C3POLoss()
+    for step, batch in enumerate(train_loader):
+        with accelerator.accumulate(model):
+            out_chosen = model(**batch["chosen"])
+            out_reject = model(**batch["reject"])
+            loss, kl, beta = loss_fn(batch["feats"],
+                                     out_chosen.logits, out_reject.logits,
+                                     batch["ref_c"], batch["ref_r"])
+            accelerator.backward(loss)
+            opt.step(); sched.step(); opt.zero_grad()
+    ```
+    Complete, fully-runnable scripts are in ./scripts/exp1/*.
+
+† PID gains (K_p=0.05, K_i=0, K_d=0.2) copied from SA-DPO repo; confirmed stable on AlpacaFarm.
+
+------------------------------------------------
+EXPERIMENT 2 – “Context awareness & safety sensitivity”
+------------------------------------------------
+1. Goal
+   Demonstrate that the learned per-sample β_i correlates with input risk/difficulty and that freezing it hurts safety.
+
+2. Model & dataset
+   • Model: Mistral-7B-Instruct  
+   • Training set: Anthropic Harmless (≈160 k pairs)  
+   • Extra evaluation sets (real, public):
+       A. Benign – subset of Anthropic Helpful (1 k)
+       B. Long & High-entropy – top 10 % length prompts within Harmless (1 k)
+       C. Adversarial Jailbreak – AdvBench-Instruct v1.0 (1 k)
+       D. Medical domain – MedQA-USMLE dev set (1 k Q-A pairs)
+
+3. Pre-processing
+   • Same tokenisation as Exp-1.  
+   • For MedQA generation, convert (question, long answer) into instruction format to query the model, collect reference answer for reward model.
+
+4. Training protocol
+   • 2 epochs C3PO, identical optimiser/lr as Exp-1.  
+   • Log β_i, KL_i, toxicity score (Perspective API), and reward per sample.
+
+5. Metrics
+   Primary:   
+   • Median β_i per split.  
+   • Harmlessness pass rate on Anthropic Harmless eval set.  
+   Secondary:   
+   • Reward, KL variance σ²_KL, correlation Spearman-ρ(β_i, feature).
+
+6. Ablation study
+   • After 1 epoch, store mean β̄.  
+   • “Freeze” run: detach MLP outputs, replace with β̄ scalar for epoch-2.
+
+7. Robustness stress
+   • Remove 20 % of toxicity-flagged samples from train set and redo training → check if β_i on split-C still rises (should).
+
+8. Evaluation code excerpt
+   ```python
+   # correlation analysis
+   import scipy.stats as st
+   rho_len, _ = st.spearmanr(beta_all, prompt_lengths)
+   rho_tox, _ = st.spearmanr(beta_all, toxicity_scores)
+   ```
+
+9. Resource use
+   • Full run <12 GPU-hours (single A100).
+
+------------------------------------------------
+EXPERIMENT 3 – “Trust-region & stability stress test”
+------------------------------------------------
+1. Goal
+   Verify monotone KL constraint satisfaction and robustness to reward scale shift.
+
+2. Setting
+   • Model: Pythia-1.4B  
+   • Dataset: UltraFeedback (dialogue)  
+   • 1 M optimisation steps; batch 256; log every 50 steps.
+
+3. Reward perturbation
+   • At global step 3 000 multiply rewards by 0.3 for exactly 500 steps; revert afterwards.
+
+4. Compared methods
+   i) C3PO (η=0.05)  
+   ii) SA-DPO (PID)  
+   iii) Fixed-β DPO (β tuned to 1.6 via grid, best reward pre-shift).
+
+5. Logged series
+   • KL_t – κ_max, β̄_t, reward_t  
+   • Oscillation amplitude: rolling std over 1 000-step window.
+
+6. Metrics & success criteria
+   • Constraint violation rate (% steps with KL>κ_max) should be 0 for C3PO.  
+   • Recovery steps: N s.t. reward_N ≥0.95·reward_pre.
+
+7. Robustness extension
+   • Add adversarial word-dropout (10 %) during shift; check if methods remain stable.
+
+8. Expected compute
+   • Each variant 6 h on a single A100 (mixed-precision, gradient-checkpointing).
+
+------------------------------------------------
+COMMON NOTES FOR ALL EXPERIMENTS
+------------------------------------------------
+A. Hyper-parameter importance analysis
+   • Use Weights-and-Biases parallel co-ordinate plots.  
+   • Vary learning-rate {5e-6,1e-5,2e-5}, η_dual {0.02,0.05,0.1} on a 1/4-sized AlpacaFarm subset; run 20 jobs via sweep; compute ANOVA F-scores to rank sensitivity.
+
+B. FLOPs & cost accounting
+   • Training FLOPs = Σ_{steps} 2·#params·seq_len·batch (forward+backward).  
+   • Inference FLOPs measured on 256-token generation of 1 k prompts.  
+   • Translate GPU-hours → $ using on-demand A100-80 GB rate ($2.48/h on AWS at time of writing).
+
+C. Memory profile
+   • nvtx + torch.cuda.memory_snapshot() each epoch; store JSON.
+
+D. Reproducibility checklist
+   • Deterministic cuDNN; 
+   • torch.backends.cuda.matmul.allow_tf32=False.  
+   • Seed all RNGs.  
+   • Git commit hash + Conda env YAML logged.
+
+E. Failure policy (NO-FALLBACK)
+   • If any dataset download fails → raise RuntimeError with URL, exit(1).  
+   • No synthetic data will be generated.
+
+============================================
+
+
+## External Resources:
+## Model
+{
+    "Model Name": "EleutherAI/pythia-1.4b",
+    "Code": "from transformers import GPTNeoXForCausalLM, AutoTokenizer\n\nmodel = GPTNeoXForCausalLM.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ntokenizer = AutoTokenizer.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ninputs = tokenizer(\"Hello, I am\", return_tensors=\"pt\")\ntokens = model.generate(**inputs)\ntokenizer.decode(tokens[0])"
+}
+## Dataset
+{
+    "Dataset Name": "tatsu-lab/alpaca_farm",
+    "Code": ""
+}{
+    "Dataset Name": "HuggingFaceH4/ultrafeedback_binarized",
+    "Code": "from datasets import load_dataset\n\nds = load_dataset(\"HuggingFaceH4/ultrafeedback_binarized\")"
+}{
+    "Dataset Name": "argilla/ultrafeedback-binarized-preferences-cleaned",
+    "Code": ""
+}{
+    "Dataset Name": "allenai/ultrafeedback_binarized_cleaned",
+    "Code": ""
+}{
+    "Dataset Name": "Baidicoot/anthropic-harmless-rlhf",
+    "Code": ""
+}{
+    "Dataset Name": "GBaker/MedQA-USMLE-4-options",
+    "Code": ""
+}{
+    "Dataset Name": "nnilayy/medqa-usmle",
+    "Code": ""
+}{
+    "Dataset Name": "augtoma/medqa_usmle",
+    "Code": ""
+}{
+    "Dataset Name": "maximegmd/MedQA-USMLE-4-options-clean",
+    "Code": ""
+}{
+    "Dataset Name": "LLMcompe-Team-Watanabe/MedQA-USMLE-4-options_preprocess",
+    "Code": "from datasets import load_dataset\n\nds = load_dataset(\"daichira/MedQA-USMLE-4-options_preprocess\", split=\"train\")\nprint(ds[0])"
+}
+Output:
+Devin session
