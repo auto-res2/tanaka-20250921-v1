@@ -133,7 +133,683 @@
         "Anthropic Harmless",
         "AdvBench-Instruct",
         "MedQA-USMLE"
-      ]
+      ],
+      "external_resources": {
+        "hugging_face": {
+          "models": [
+            {
+              "id": "EleutherAI/pythia-1.4b",
+              "author": "EleutherAI",
+              "sha": "fedc38a16eea3bd36a96b906d78d11d2ce18ed79",
+              "created_at": "2023-02-09T14:08:20+00:00",
+              "last_modified": "2023-07-09T16:01:57+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 68077,
+              "likes": 25,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "config.json"
+                },
+                {
+                  "rfilename": "model.safetensors"
+                },
+                {
+                  "rfilename": "pytorch_model.bin"
+                },
+                {
+                  "rfilename": "special_tokens_map.json"
+                },
+                {
+                  "rfilename": "tokenizer.json"
+                },
+                {
+                  "rfilename": "tokenizer_config.json"
+                }
+              ],
+              "card_data": {
+                "license": "apache-2.0",
+                "language": [
+                  "en"
+                ],
+                "tags": [
+                  "pytorch",
+                  "causal-lm",
+                  "pythia"
+                ],
+                "datasets": [
+                  "EleutherAI/the_pile"
+                ],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "transformers",
+                "pytorch",
+                "safetensors",
+                "gpt_neox",
+                "text-generation",
+                "causal-lm",
+                "pythia",
+                "en",
+                "dataset:EleutherAI/the_pile",
+                "arxiv:2304.01373",
+                "arxiv:2101.00027",
+                "arxiv:2201.07311",
+                "license:apache-2.0",
+                "autotrain_compatible",
+                "text-generation-inference",
+                "endpoints_compatible",
+                "region:us"
+              ],
+              "pipeline_tag": "text-generation",
+              "library_name": "transformers",
+              "readme": "---\nlanguage:\n- en\ntags:\n- pytorch\n- causal-lm\n- pythia\nlicense: apache-2.0\ndatasets:\n- EleutherAI/the_pile\n---\n\nThe *Pythia Scaling Suite* is a collection of models developed to facilitate \ninterpretability research [(see paper)](https://arxiv.org/pdf/2304.01373.pdf). \nIt contains two sets of eight models of sizes \n70M, 160M, 410M, 1B, 1.4B, 2.8B, 6.9B, and 12B. For each size, there are two \nmodels: one trained on the Pile, and one trained on the Pile after the dataset \nhas been globally deduplicated. All 8 model sizes are trained on the exact \nsame data, in the exact same order. We also provide 154 intermediate \ncheckpoints per model, hosted on Hugging Face as branches.\n\nThe Pythia model suite was deliberately designed to promote scientific \nresearch on large language models, especially interpretability research. \nDespite not centering downstream performance as a design goal, we find the \nmodels <a href=\"#evaluations\">match or exceed</a> the performance of \nsimilar and same-sized models, such as those in the OPT and GPT-Neo suites.\n\n<details>\n  <summary style=\"font-weight:600\">Details on previous early release and naming convention.</summary>\n\nPreviously, we released an early version of the Pythia suite to the public. \nHowever, we decided to retrain the model suite to address a few hyperparameter \ndiscrepancies. This model card <a href=\"#changelog\">lists the changes</a>; \nsee appendix B in the Pythia paper for further discussion. We found no \ndifference in benchmark performance between the two Pythia versions. \nThe old models are \n[still available](https://huggingface.co/models?other=pythia_v0), but we \nsuggest the retrained suite if you are just starting to use Pythia.<br>\n**This is the current release.**\n\nPlease note that all models in the *Pythia* suite were renamed in January \n2023. For clarity, a <a href=\"#naming-convention-and-parameter-count\">table \ncomparing the old and new names</a> is provided in this model card, together \nwith exact parameter counts.\n</details>\n<br>\n\n# Pythia-1.4B\n\n## Model Details\n\n- Developed by: [EleutherAI](http://eleuther.ai)\n- Model type: Transformer-based Language Model\n- Language: English\n- Learn more: [Pythia's GitHub repository](https://github.com/EleutherAI/pythia)\n for training procedure, config files, and details on how to use.\n [See paper](https://arxiv.org/pdf/2304.01373.pdf) for more evals and implementation\n details.\n- Library: [GPT-NeoX](https://github.com/EleutherAI/gpt-neox)\n- License: Apache 2.0\n- Contact: to ask questions about this model, join the [EleutherAI \nDiscord](https://discord.gg/zBGx3azzUn), and post them in `#release-discussion`.\n Please read the existing *Pythia* documentation before asking about it in the \n EleutherAI Discord. For general correspondence: [contact@eleuther.\n ai](mailto:contact@eleuther.ai).\n\n<figure>\n\n| Pythia model | Non-Embedding Params | Layers | Model Dim | Heads | Batch Size | Learning Rate         | Equivalent Models      |\n| -----------: | -------------------: | :----: | :-------: | :---: | :--------: | :-------------------: | :--------------------: |\n| 70M          | 18,915,328           | 6      | 512       | 8     | 2M         | 1.0 x 10<sup>-3</sup> | —                      |\n| 160M         | 85,056,000           | 12     | 768       | 12    | 2M         | 6.0 x 10<sup>-4</sup> | GPT-Neo 125M, OPT-125M |\n| 410M         | 302,311,424          | 24     | 1024      | 16    | 2M         | 3.0 x 10<sup>-4</sup> | OPT-350M               |\n| 1.0B         | 805,736,448          | 16     | 2048      | 8     | 2M         | 3.0 x 10<sup>-4</sup> | —                      |\n| 1.4B         | 1,208,602,624        | 24     | 2048      | 16    | 2M         | 2.0 x 10<sup>-4</sup> | GPT-Neo 1.3B, OPT-1.3B |\n| 2.8B         | 2,517,652,480        | 32     | 2560      | 32    | 2M         | 1.6 x 10<sup>-4</sup> | GPT-Neo 2.7B, OPT-2.7B |\n| 6.9B         | 6,444,163,072        | 32     | 4096      | 32    | 2M         | 1.2 x 10<sup>-4</sup> | OPT-6.7B               |\n| 12B          | 11,327,027,200       | 36     | 5120      | 40    | 2M         | 1.2 x 10<sup>-4</sup> | —                      |\n<figcaption>Engineering details for the <i>Pythia Suite</i>. Deduped and \nnon-deduped models of a given size have the same hyperparameters. “Equivalent” \nmodels have <b>exactly</b> the same architecture, and the same number of \nnon-embedding parameters.</figcaption>\n</figure>\n\n## Uses and Limitations\n\n### Intended Use\n\nThe primary intended use of Pythia is research on the behavior, functionality, \nand limitations of large language models. This suite is intended to provide \na controlled setting for performing scientific experiments. We also provide \n154 checkpoints per model: initial `step0`, 10 log-spaced checkpoints \n`step{1,2,4...512}`, and 143 evenly-spaced checkpoints from `step1000` to \n`step143000`. These checkpoints are hosted on Hugging Face as branches. Note \nthat branch `143000` corresponds exactly to the model checkpoint on the `main` \nbranch of each model.\n\nYou may also further fine-tune and adapt Pythia-1.4B for deployment, \nas long as your use is in accordance with the Apache 2.0 license. Pythia \nmodels work with the Hugging Face [Transformers \nLibrary](https://huggingface.co/docs/transformers/index). If you decide to use \npre-trained Pythia-1.4B as a basis for your fine-tuned model, please \nconduct your own risk and bias assessment. \n\n### Out-of-scope use\n\nThe Pythia Suite is **not** intended for deployment. It is not a in itself \na product and cannot be used for human-facing interactions. For example, \nthe model may generate harmful or offensive text. Please evaluate the risks\nassociated with your particular use case.\n\nPythia models are English-language only, and are not suitable for translation \nor generating text in other languages.\n\nPythia-1.4B has not been fine-tuned for downstream contexts in which \nlanguage models are commonly deployed, such as writing genre prose, \nor commercial chatbots. This means Pythia-1.4B will **not** \nrespond to a given prompt the way a product like ChatGPT does. This is because,\n unlike this model, ChatGPT was fine-tuned using methods such as Reinforcement \nLearning from Human Feedback (RLHF) to better “follow” human instructions.\n\n### Limitations and biases\n\nThe core functionality of a large language model is to take a string of text \nand predict the next token. The token used by the model need not produce the \nmost “accurate” text. Never rely on Pythia-1.4B to produce factually accurate \noutput.\n\nThis model was trained on [the Pile](https://pile.eleuther.ai/), a dataset \nknown to contain profanity and texts that are lewd or otherwise offensive. \nSee [Section 6 of the Pile paper](https://arxiv.org/abs/2101.00027) for a \ndiscussion of documented biases with regards to gender, religion, and race. \nPythia-1.4B may produce socially unacceptable or undesirable text, *even if* \nthe prompt itself does not include anything explicitly offensive. \n\nIf you plan on using text generated through, for example, the Hosted Inference \nAPI, we recommend having a human curate the outputs of this language model \nbefore presenting it to other people. Please inform your audience that the \ntext was generated by Pythia-1.4B.\n\n### Quickstart\n\nPythia models can be loaded and used via the following code, demonstrated here \nfor the third `pythia-70m-deduped` checkpoint:\n\n```python\nfrom transformers import GPTNeoXForCausalLM, AutoTokenizer\n\nmodel = GPTNeoXForCausalLM.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ntokenizer = AutoTokenizer.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ninputs = tokenizer(\"Hello, I am\", return_tensors=\"pt\")\ntokens = model.generate(**inputs)\ntokenizer.decode(tokens[0])\n```\n\nRevision/branch `step143000` corresponds exactly to the model checkpoint on \nthe `main` branch of each model.<br>\nFor more information on how to use all Pythia models, see [documentation on \nGitHub](https://github.com/EleutherAI/pythia).\n\n## Training\n\n### Training data\n\n[The Pile](https://pile.eleuther.ai/) is a 825GiB general-purpose dataset in \nEnglish. It was created by EleutherAI specifically for training large language \nmodels. It contains texts from 22 diverse sources, roughly broken down into \nfive categories: academic writing (e.g. arXiv), internet (e.g. CommonCrawl), \nprose (e.g. Project Gutenberg), dialogue (e.g. YouTube subtitles), and \nmiscellaneous (e.g. GitHub, Enron Emails). See [the Pile \npaper](https://arxiv.org/abs/2101.00027) for a breakdown of all data sources, \nmethodology, and a discussion of ethical implications. Consult [the \ndatasheet](https://arxiv.org/abs/2201.07311) for more detailed documentation \nabout the Pile and its component datasets. The Pile can be downloaded from \nthe [official website](https://pile.eleuther.ai/), or from a [community \nmirror](https://the-eye.eu/public/AI/pile/).<br>\nThe Pile was **not** deduplicated before being used to train Pythia-1.4B.\n\n### Training procedure\n\nAll models were trained on the exact same data, in the exact same order. Each \nmodel saw 299,892,736,000 tokens during training, and 143 checkpoints for each \nmodel are saved every 2,097,152,000 tokens, spaced evenly throughout training, \nfrom `step1000` to `step143000` (which is the same as `main`). In addition, we \nalso provide frequent early checkpoints: `step0` and `step{1,2,4...512}`.\nThis corresponds to training for just under 1 epoch on the Pile for \nnon-deduplicated models, and about 1.5 epochs on the deduplicated Pile.\n\nAll *Pythia* models trained for 143000 steps at a batch size \nof 2M (2,097,152 tokens).<br>\nSee [GitHub](https://github.com/EleutherAI/pythia) for more details on training\n procedure, including [how to reproduce \n it](https://github.com/EleutherAI/pythia/blob/main/README.md#reproducing-training).<br>\nPythia uses the same tokenizer as [GPT-NeoX-\n20B](https://huggingface.co/EleutherAI/gpt-neox-20b).\n\n## Evaluations\n\nAll 16 *Pythia* models were evaluated using the [LM Evaluation \nHarness](https://github.com/EleutherAI/lm-evaluation-harness). You can access \nthe results by model and step at `results/json/*` in the [GitHub \nrepository](https://github.com/EleutherAI/pythia/tree/main/results/json/).<br>\nExpand the sections below to see plots of evaluation results for all \nPythia and Pythia-deduped models compared with OPT and BLOOM.\n\n<details>\n  <summary>LAMBADA – OpenAI</summary>\n  <img src=\"/EleutherAI/pythia-12b/resolve/main/eval_plots/lambada_openai_v1.png\" style=\"width:auto\"/>\n</details>\n\n<details>\n  <summary>Physical Interaction: Question Answering (PIQA)</summary>\n  <img src=\"/EleutherAI/pythia-12b/resolve/main/eval_plots/piqa_v1.png\" style=\"width:auto\"/>\n</details>\n\n<details>\n  <summary>WinoGrande</summary>\n  <img src=\"/EleutherAI/pythia-12b/resolve/main/eval_plots/winogrande_v1.png\" style=\"width:auto\"/>\n</details>\n\n<details>\n  <summary>AI2 Reasoning Challenge—Easy Set</summary>\n  <img src=\"/EleutherAI/pythia-12b/resolve/main/eval_plots/arc_easy_v1.png\" style=\"width:auto\"/>\n</details>\n\n<details>\n  <summary>SciQ</summary>\n  <img src=\"/EleutherAI/pythia-12b/resolve/main/eval_plots/sciq_v1.png\" style=\"width:auto\"/>\n</details>\n\n## Changelog\n\nThis section compares differences between previously released \n[Pythia v0](https://huggingface.co/models?other=pythia_v0) and the current \nmodels. See Appendix B of the Pythia paper for further discussion of these \nchanges and the motivation behind them. We found that retraining Pythia had no \nimpact on benchmark performance.\n\n- All model sizes are now trained with uniform batch size of 2M tokens. \nPreviously, the models of size 160M, 410M, and 1.4B parameters were trained \nwith batch sizes of 4M tokens.\n- We added checkpoints at initialization (step 0) and steps {1,2,4,8,16,32,64,\n128,256,512} in addition to every 1000 training steps.\n- Flash Attention was used in the new retrained suite.\n- We remedied a minor inconsistency that existed in the original suite: all \nmodels of size 2.8B parameters or smaller had a learning rate (LR) schedule \nwhich decayed to a minimum LR of 10% the starting LR rate, but the 6.9B and \n12B models all used an LR schedule which decayed to a minimum LR of 0. In \nthe redone training runs, we rectified this inconsistency: all models now were \ntrained with LR decaying to a minimum of 0.1× their maximum LR.\n\n### Naming convention and parameter count\n\n*Pythia* models were renamed in January 2023. It is possible that the old \nnaming convention still persists in some documentation by accident. The \ncurrent naming convention (70M, 160M, etc.) is based on total parameter count. \n\n<figure style=\"width:32em\">\n  \n| current Pythia suffix | old suffix | total params   | non-embedding params |\n| --------------------: | ---------: | -------------: | -------------------: |\n| 70M                   | 19M        | 70,426,624     | 18,915,328           |\n| 160M                  | 125M       | 162,322,944    | 85,056,000           |\n| 410M                  | 350M       | 405,334,016    | 302,311,424          |\n| 1B                    | 800M       | 1,011,781,632  | 805,736,448          |\n| 1.4B                  | 1.3B       | 1,414,647,808  | 1,208,602,624        |\n| 2.8B                  | 2.7B       | 2,775,208,960  | 2,517,652,480        |\n| 6.9B                  | 6.7B       | 6,857,302,016  | 6,444,163,072        |\n| 12B                   | 13B        | 11,846,072,320 | 11,327,027,200       |\n</figure>",
+              "extracted_code": "from transformers import GPTNeoXForCausalLM, AutoTokenizer\n\nmodel = GPTNeoXForCausalLM.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ntokenizer = AutoTokenizer.from_pretrained(\n  \"EleutherAI/pythia-70m-deduped\",\n  revision=\"step3000\",\n  cache_dir=\"./pythia-70m-deduped/step3000\",\n)\n\ninputs = tokenizer(\"Hello, I am\", return_tensors=\"pt\")\ntokens = model.generate(**inputs)\ntokenizer.decode(tokens[0])"
+            }
+          ],
+          "datasets": [
+            {
+              "id": "tatsu-lab/alpaca_farm",
+              "author": "tatsu-lab",
+              "sha": "e576524ca841af3c36fd6912e68e5920430928c1",
+              "created_at": "2023-05-13T22:28:40+00:00",
+              "last_modified": "2023-05-29T01:00:10+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 1026,
+              "likes": 33,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "alpaca_farm.py"
+                },
+                {
+                  "rfilename": "alpaca_farm_evaluation.json"
+                },
+                {
+                  "rfilename": "alpaca_gpt4_preference.json"
+                },
+                {
+                  "rfilename": "alpaca_human_preference.json"
+                },
+                {
+                  "rfilename": "alpaca_instructions/preference.json"
+                },
+                {
+                  "rfilename": "alpaca_instructions/sft.json"
+                },
+                {
+                  "rfilename": "alpaca_instructions/unlabeled.json"
+                },
+                {
+                  "rfilename": "alpaca_instructions/val.json"
+                }
+              ],
+              "card_data": {
+                "license": "cc-by-nc-4.0",
+                "language": [],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "license:cc-by-nc-4.0",
+                "size_categories:10K<n<100K",
+                "modality:tabular",
+                "modality:text",
+                "library:datasets",
+                "library:mlcroissant",
+                "region:us"
+              ],
+              "readme": "---\nlicense: cc-by-nc-4.0\n---",
+              "extracted_code": ""
+            },
+            {
+              "id": "HuggingFaceH4/ultrafeedback_binarized",
+              "author": "HuggingFaceH4",
+              "sha": "3949bf5f8c17c394422ccfab0c31ea9c20bdeb85",
+              "created_at": "2023-10-24T08:53:19+00:00",
+              "last_modified": "2024-10-16T11:49:06+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 32009,
+              "likes": 304,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "create_dataset.py"
+                },
+                {
+                  "rfilename": "data/test_gen-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/test_prefs-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/test_sft-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_gen-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_prefs-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_sft-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "license": "mit",
+                "language": [
+                  "en"
+                ],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [
+                  "text-generation"
+                ],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "task_categories:text-generation",
+                "language:en",
+                "license:mit",
+                "size_categories:100K<n<1M",
+                "format:parquet",
+                "modality:tabular",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "arxiv:2310.01377",
+                "region:us"
+              ],
+              "readme": "---\nlanguage:\n- en\nlicense: mit\ntask_categories:\n- text-generation\npretty_name: UltraFeedback Binarized\nconfigs:\n- config_name: default\n  data_files:\n  - split: train_prefs\n    path: data/train_prefs-*\n  - split: train_sft\n    path: data/train_sft-*\n  - split: test_prefs\n    path: data/test_prefs-*\n  - split: test_sft\n    path: data/test_sft-*\n  - split: train_gen\n    path: data/train_gen-*\n  - split: test_gen\n    path: data/test_gen-*\ndataset_info:\n  features:\n  - name: prompt\n    dtype: string\n  - name: prompt_id\n    dtype: string\n  - name: chosen\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: rejected\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: messages\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: score_chosen\n    dtype: float64\n  - name: score_rejected\n    dtype: float64\n  splits:\n  - name: train_prefs\n    num_bytes: 405688662\n    num_examples: 61135\n  - name: train_sft\n    num_bytes: 405688662\n    num_examples: 61135\n  - name: test_prefs\n    num_bytes: 13161585\n    num_examples: 2000\n  - name: test_sft\n    num_bytes: 6697333\n    num_examples: 1000\n  - name: train_gen\n    num_bytes: 325040536\n    num_examples: 61135\n  - name: test_gen\n    num_bytes: 5337695\n    num_examples: 1000\n  download_size: 649967196\n  dataset_size: 1161614473\n---\n\n# Dataset Card for UltraFeedback Binarized\n\n## Dataset Description\n\nThis is a pre-processed version of the [UltraFeedback dataset](https://huggingface.co/datasets/openbmb/UltraFeedback) and was used to train [Zephyr-7Β-β](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta), a state of the art chat model at the 7B parameter scale. \n\nThe original UltraFeedback dataset consists of 64k prompts, where each prompt is accompanied with four model completions from a wide variety of open and proprietary models. GPT-4 is then used to assign a score to each completion, along criteria like helpfulness and honesty. To create `UltraFeedback Binarized`, we picked the highest `overall_score` as the \"chosen\" completion, and one of the remaining 3 at random as the \"rejected\" one. This defines the preference modelling splits for techniques like reward modelling or DPO. We also created splits for supervised fine-tuning (SFT) that use the \"chosen\" column as the dialogues to model, along with splits that involve generation like rejection sampling or PPO. For details on the dataset processing, see the accompanying [script](https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized/blob/main/create_dataset.py).\n\n## Dataset Structure\n\n### Usage\n\nTo load the dataset, run:\n\n```python\nfrom datasets import load_dataset\n\nds = load_dataset(\"HuggingFaceH4/ultrafeedback_binarized\")\n```\n\n**Note:** after the release of Zephyr-7b-β, the team at [Argilla](https://huggingface.co/argilla) noted that there were a few hundred completions with the incorrect label. Similarly, members of the community pointed out that a several prompts were sourced from the TruthfulQA benchmark which can lead to contamination with public leaderboards. Both of these issues have been resolved in the latest version of the dataset, but if you wish to use the older version, you can run:\n\n```python\nfrom datasets import load_dataset\n\nds = load_dataset(\"HuggingFaceH4/ultrafeedback_binarized\", revision=\"292c16329d921287c4166934cac1a6ad1e13a6c5\")\n```\n\n### Data Splits\n\nThe dataset has six splits, suitable for:\n\n* Supervised fine-tuning (`sft`).\n* Preference modelling (`prefs`) to train reward models or apply techniques like DPO.\n* Generation ranking (`gen`) via techniques like rejection sampling or PPO.\n\nThe number of examples per split is shown as follows:\n\n\n|  train_sft | test_sft | train_prefs | test_prefs | train_gen | test_gen |\n|:-------:|:-----------:|:-----:| :-----:| :-----:| :-----:|\n|  61135 |       1000 | 61135 | 2000 | 61135 | 1000 |\n\n\nThe dataset is stored in parquet format with each entry using the following schema:\n\n```\n{\n    \"prompt\": \"Which books are still banned in Canada?\",\n    \"chosen\": [\n    {\n        \"content\": \"Which books are still banned in Canada?\", \n        \"role\": \"user\"\n    },\n    {\n        \"content\": \"As a responsible and ethical AI assistant, I must inform you that I cannot provide a list of banned books in Canada, as there are no books that are currently banned in the country. Canada has a strong commitment to freedom of expression and the right to access information, and there are no laws in place that restrict the publication or distribution of books.\\n\",\n        \"role\": \"assistant\"\n        }\n    ],\n \"messages\": [\n     {\n         \"content\": \"Which books are still banned in Canada?\",\n         \"role\": \"user\"\n    },\n    {\n        \"content\": \"As a responsible and ethical AI assistant, I must inform you that I cannot provide a list of banned books in Canada, as there are no books that are currently banned in the country. Canada has a strong commitment to freedom of expression and the right to access information, and there are no laws in place that restrict the publication or distribution of books.\\n\",\n        \"role\": \"assistant\"\n    }],\n \n \"prompt_id\": \"aeccf551d9ba42fdf5f2044de43b8ce6e360fb523ace428317b81d804594e090\",\n \"rejected\": [\n     {\n         \"content\": \"Which books are still banned in Canada?\",\n         \"role\": \"user\"},\n     {\n         \"content\": \"According to the Canadian Government’s Ban Affront website, there are still several books that are banned in Canada. These include The Begum’s Millionaire, The Education of Little Tree, The Harry Potter series, Lolita, 1984, and Lady Chatterley’s Lover. Some of these books are considered inaccessible due to their age, while others are still legally banned in certain parts of the country.\",\n         \"role\": \"assistant\"\n         }\n     ],\n \"score_chosen\": 8.0,\n \"score_rejected\": 5.0\n}\n```\n\nYou should use the `chosen` and `rejected` columns for techniques like DPO, while the `messages` column is suitable for SFT or PPO.\n\n## Citation\n\nIf you find this dataset is useful in your work, please cite the original UltraFeedback dataset: \n\n```\n@misc{cui2023ultrafeedback,\n      title={UltraFeedback: Boosting Language Models with High-quality Feedback}, \n      author={Ganqu Cui and Lifan Yuan and Ning Ding and Guanming Yao and Wei Zhu and Yuan Ni and Guotong Xie and Zhiyuan Liu and Maosong Sun},\n      year={2023},\n      eprint={2310.01377},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL}\n}\n```",
+              "extracted_code": "from datasets import load_dataset\n\nds = load_dataset(\"HuggingFaceH4/ultrafeedback_binarized\")"
+            },
+            {
+              "id": "argilla/ultrafeedback-binarized-preferences-cleaned",
+              "author": "argilla",
+              "sha": "770076f077c4c5e298498fa32f804857f46d5134",
+              "created_at": "2023-12-05T11:07:34+00:00",
+              "last_modified": "2023-12-11T14:22:19+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 4471,
+              "likes": 149,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/train-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "notebook.ipynb"
+                }
+              ],
+              "card_data": {
+                "license": "mit",
+                "language": [
+                  "en"
+                ],
+                "tags": [
+                  "dpo",
+                  "preference",
+                  "ultrafeedback"
+                ],
+                "datasets": [],
+                "task_categories": [
+                  "text-generation"
+                ],
+                "size_categories": [
+                  "10K<n<100K"
+                ],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "task_categories:text-generation",
+                "language:en",
+                "license:mit",
+                "size_categories:10K<n<100K",
+                "format:parquet",
+                "modality:tabular",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us",
+                "dpo",
+                "preference",
+                "ultrafeedback"
+              ],
+              "readme": "---\nlanguage:\n- en\nlicense: mit\nsize_categories:\n- 10K<n<100K\ntask_categories:\n- text-generation\npretty_name: UltraFeedback Binarized Preferences Cleaned\ndataset_info:\n  features:\n  - name: source\n    dtype: string\n  - name: prompt\n    dtype: string\n  - name: chosen\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: chosen-rating\n    dtype: float64\n  - name: chosen-model\n    dtype: string\n  - name: rejected\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: rejected-rating\n    dtype: float64\n  - name: rejected-model\n    dtype: string\n  splits:\n  - name: train\n    num_bytes: 284937773\n    num_examples: 60917\n  download_size: 143257393\n  dataset_size: 284937773\nconfigs:\n- config_name: default\n  data_files:\n  - split: train\n    path: data/train-*\ntags:\n- dpo\n- preference\n- ultrafeedback\n---\n\n# UltraFeedback - Binarized using the Average of Preference Ratings (Cleaned)\n\nThis dataset represents a new iteration on top of [`argilla/ultrafeedback-binarized-preferences`](https://huggingface.co/argilla/ultrafeedback-binarized-preferences),\nand is the **recommended and preferred dataset by Argilla to use from now on when fine-tuning on UltraFeedback**.\n\nRead more about Argilla's approach towards UltraFeedback binarization at [`argilla/ultrafeedback-binarized-preferences/README.md`](https://huggingface.co/datasets/argilla/ultrafeedback-binarized-preferences/blob/main/README.md).\n\n## Differences with `argilla/ultrafeedback-binarized-preferences`\n\nThanks to the recent issue identified by [AllenAI](https://huggingface.co/allenai) related to the TruthfulQA contamination within the\noriginal UltraFeedback dataset due to some prompts being reused from the TruthfulQA dataset (used for benchmarking\nin the [Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) from HuggingFace H4), we also decided\nto follow AllenAI's advice and remove those from the UltraFeedback dataset that we binarized using a completely different approach, which\nimplied using the average of the preference ratings rather than the critique overall score, as\n[`HuggingFaceH4/ultrafeedback_binarized`](https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized) did.\n\nBesides that, we also saw that not only the rows with the `source=truthful_qa` were contamined (for obvious reasons), but also some\ncoming from ShareGPT, so we also removed those doing a left join with both subsets from the [`truthful_qa`](https://huggingface.co/datasets/truthful_qa) dataset.\n\nAdditionally, we also modified the formatting to be aligned with both [`HuggingFaceH4/ultrafeedback_binarized`](https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized),\nand [`allenai/ultrafeedback_binarized_cleaned`](https://huggingface.co/datasets/allenai/ultrafeedback_binarized_cleaned) in order to ease\nthe integration within the [`huggingface/alignment-handbook`](https://github.com/huggingface/alignment-handbook) so that the formatting is standardized.\n\n## Reproduce\n\n<a target=\"_blank\" href=\"https://colab.research.google.com/drive/1XR9P1St4yTNY0tjti_tIjm-yzP5Bfqc0?usp=sharing\">\n  <img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/>\n</a>\n\nTo reproduce the data processing combining both our approach and the suggestions from HuggingFace H4 w.r.t. the formatting and the ones from AllenAI to\nremove the TruthfulQA contamination, feel free to run the attached Colab Notebook or just view it at [`notebook.ipynb`](./notebook.ipynb) within this repository.\n\nFrom Argilla we encourage anyone out there to play around, investigate, and experiment with the data, and we firmly believe on open sourcing what we do, as\nourselves, as well as the whole community, benefit a lot from open source and we also want to give back.\n\n## Citation\n\nIf you find this dataset is useful in your work, please cite the original UltraFeedback dataset: https://huggingface.co/datasets/openbmb/UltraFeedback\n\nAdditionally, you may also want to cite our work with Notus 7B, which lead the curation of the UltraFeedback dataset:\n\n```bibtex\n@misc{notus2023,\n  author = {Alvaro Bartolome and Gabriel Martin and Daniel Vila},\n  title = {Notus},\n  year = {2023},\n  publisher = {GitHub},\n  journal = {GitHub Repository},\n  howpublished = {\\url{https://github.com/argilla-io/notus}}\n}\n```\n\n> Alphabetically ordered by last name due to equal contribution.",
+              "extracted_code": ""
+            },
+            {
+              "id": "allenai/ultrafeedback_binarized_cleaned",
+              "author": "allenai",
+              "sha": "f304ce59671d155273c861746581faa354d8a9af",
+              "created_at": "2023-11-29T18:03:33+00:00",
+              "last_modified": "2023-12-01T18:42:09+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 507,
+              "likes": 70,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/test_gen-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/test_prefs-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/test_sft-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_gen-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_prefs-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train_sft-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "license": "mit",
+                "language": [],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "license:mit",
+                "size_categories:100K<n<1M",
+                "format:parquet",
+                "modality:tabular",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us"
+              ],
+              "readme": "---\nlicense: mit\nconfigs:\n- config_name: default\n  data_files:\n  - split: train_sft\n    path: data/train_sft-*\n  - split: test_sft\n    path: data/test_sft-*\n  - split: train_gen\n    path: data/train_gen-*\n  - split: test_gen\n    path: data/test_gen-*\n  - split: train_prefs\n    path: data/train_prefs-*\n  - split: test_prefs\n    path: data/test_prefs-*\ndataset_info:\n  features:\n  - name: prompt\n    dtype: string\n  - name: prompt_id\n    dtype: string\n  - name: chosen\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: rejected\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: messages\n    list:\n    - name: content\n      dtype: string\n    - name: role\n      dtype: string\n  - name: score_chosen\n    dtype: float64\n  - name: score_rejected\n    dtype: float64\n  - name: source\n    dtype: string\n  splits:\n  - name: train_sft\n    num_bytes: 393926052.7984401\n    num_examples: 60829\n  - name: test_sft\n    num_bytes: 6230841.363636363\n    num_examples: 985\n  - name: train_gen\n    num_bytes: 314344767.49216783\n    num_examples: 60829\n  - name: test_gen\n    num_bytes: 4982506.090909091\n    num_examples: 985\n  - name: train_prefs\n    num_bytes: 393926052.7984401\n    num_examples: 60829\n  - name: test_prefs\n    num_bytes: 12672623.615773508\n    num_examples: 1964\n  download_size: 629736515\n  dataset_size: 1126082844.1593668\n---\n# Dataset Card for \"ultrafeedback_binarized_cleaned\"\n\n**Update 1/12/2023**: I've removed examples identified as faulty by Argilla - see [their awesome work](https://huggingface.co/datasets/argilla/ultrafeedback-binarized-preferences) for more details.\n\nThis is a version of the [UltraFeedback binarized dataset](https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized) but with TruthfulQA prompts removed and source annotations added (so you can filter out samples from different sources yourself if you want!).\n\nPlease see the [binarized dataset card for more information](https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized), or the [original UltraFeedback dataset card](https://huggingface.co/datasets/openbmb/UltraFeedback).",
+              "extracted_code": ""
+            },
+            {
+              "id": "Baidicoot/anthropic-harmless-rlhf",
+              "author": "Baidicoot",
+              "sha": "ffd7d8e7cb13a45a8c8dfe94ccd9658f4e294f89",
+              "created_at": "2024-05-05T18:10:30+00:00",
+              "last_modified": "2024-05-10T13:33:13+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 16,
+              "likes": 0,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/test-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "language": [],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "size_categories:10K<n<100K",
+                "format:parquet",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us"
+              ],
+              "readme": "---\ndataset_info:\n  features:\n  - name: chosen\n    dtype: string\n  - name: rejected\n    dtype: string\n  - name: prompt\n    dtype: string\n  splits:\n  - name: train\n    num_bytes: 36676366.0\n    num_examples: 42037\n  - name: test\n    num_bytes: 441483.0\n    num_examples: 500\n  download_size: 21139180\n  dataset_size: 37117849.0\nconfigs:\n- config_name: default\n  data_files:\n  - split: train\n    path: data/train-*\n  - split: test\n    path: data/test-*\n---\n",
+              "extracted_code": ""
+            },
+            {
+              "id": "GBaker/MedQA-USMLE-4-options",
+              "author": "GBaker",
+              "sha": "0fb93dd23a7339b6dcd27e241cb9b5eca62d4d18",
+              "created_at": "2023-01-24T19:08:56+00:00",
+              "last_modified": "2023-01-24T19:18:09+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 6533,
+              "likes": 68,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "phrases_no_exclude_test.jsonl"
+                },
+                {
+                  "rfilename": "phrases_no_exclude_train.jsonl"
+                }
+              ],
+              "card_data": {
+                "license": "cc-by-4.0",
+                "language": [
+                  "en"
+                ],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "language:en",
+                "license:cc-by-4.0",
+                "size_categories:10K<n<100K",
+                "format:json",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "arxiv:2009.13081",
+                "region:us"
+              ],
+              "readme": "---\nlicense: cc-by-4.0\nlanguage:\n- en\n---\n\nOriginal dataset introduced by Jin et al. in [What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams](https://paperswithcode.com/paper/what-disease-does-this-patient-have-a-large)\n\n<h4>Citation information:</h4>\n\n    @article{jin2020disease,\n      title={What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams},\n      author={Jin, Di and Pan, Eileen and Oufattole, Nassim and Weng, Wei-Hung and Fang, Hanyi and Szolovits, Peter},\n      journal={arXiv preprint arXiv:2009.13081},\n      year={2020}\n    }\n",
+              "extracted_code": ""
+            },
+            {
+              "id": "nnilayy/medqa-usmle",
+              "author": "nnilayy",
+              "sha": "fe5239d482a88286d59704c786e03e2c528110bc",
+              "created_at": "2024-09-11T21:37:22+00:00",
+              "last_modified": "2024-09-11T21:37:25+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 101,
+              "likes": 0,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/test-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/train-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/validation-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "language": [],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "size_categories:10K<n<100K",
+                "format:parquet",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us"
+              ],
+              "readme": "---\ndataset_info:\n  features:\n  - name: id\n    dtype: string\n  - name: sent1\n    dtype: string\n  - name: sent2\n    dtype: string\n  - name: ending0\n    dtype: string\n  - name: ending1\n    dtype: string\n  - name: ending2\n    dtype: string\n  - name: ending3\n    dtype: string\n  - name: label\n    dtype: int64\n  splits:\n  - name: train\n    num_bytes: 8960967\n    num_examples: 10178\n  - name: validation\n    num_bytes: 1118434\n    num_examples: 1272\n  - name: test\n    num_bytes: 1146462\n    num_examples: 1273\n  download_size: 6433072\n  dataset_size: 11225863\nconfigs:\n- config_name: default\n  data_files:\n  - split: train\n    path: data/train-*\n  - split: validation\n    path: data/validation-*\n  - split: test\n    path: data/test-*\n---\n",
+              "extracted_code": ""
+            },
+            {
+              "id": "augtoma/medqa_usmle",
+              "author": "augtoma",
+              "sha": "cd56672670693a4d5a81814d41955f21f6b32e7a",
+              "created_at": "2023-08-11T20:49:29+00:00",
+              "last_modified": "2023-08-11T20:50:07+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 41,
+              "likes": 1,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/test-00000-of-00001-997553f5b24c9767.parquet"
+                },
+                {
+                  "rfilename": "data/train-00000-of-00001-a6e6f83961340098.parquet"
+                }
+              ],
+              "card_data": {
+                "language": [],
+                "tags": [],
+                "datasets": [],
+                "task_categories": [],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "size_categories:10K<n<100K",
+                "format:parquet",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us"
+              ],
+              "readme": "---\nconfigs:\n- config_name: default\n  data_files:\n  - split: train\n    path: data/train-*\n  - split: test\n    path: data/test-*\ndataset_info:\n  features:\n  - name: question\n    dtype: string\n  - name: answer\n    dtype: string\n  - name: options\n    struct:\n    - name: A\n      dtype: string\n    - name: B\n      dtype: string\n    - name: C\n      dtype: string\n    - name: D\n      dtype: string\n  - name: meta_info\n    dtype: string\n  - name: answer_idx\n    dtype: string\n  - name: metamap_phrases\n    sequence: string\n  splits:\n  - name: train\n    num_bytes: 15175834\n    num_examples: 10178\n  - name: test\n    num_bytes: 1946030\n    num_examples: 1273\n  download_size: 8869925\n  dataset_size: 17121864\n---\n# Dataset Card for \"medqa_usmle\"\n\n[More Information needed](https://github.com/huggingface/datasets/blob/main/CONTRIBUTING.md#how-to-contribute-to-the-dataset-cards)",
+              "extracted_code": ""
+            },
+            {
+              "id": "maximegmd/MedQA-USMLE-4-options-clean",
+              "author": "maximegmd",
+              "sha": "47b1dd9a7fb8ea66dd2a3ce9039c2e8889dbbc81",
+              "created_at": "2024-06-17T12:58:24+00:00",
+              "last_modified": "2024-11-18T09:17:58+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 40,
+              "likes": 0,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/incomplete-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/test-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "license": "cc-by-4.0",
+                "language": [
+                  "en"
+                ],
+                "tags": [
+                  "medical"
+                ],
+                "datasets": [],
+                "task_categories": [
+                  "question-answering"
+                ],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "task_categories:question-answering",
+                "language:en",
+                "license:cc-by-4.0",
+                "size_categories:1K<n<10K",
+                "format:parquet",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "doi:10.57967/hf/3546",
+                "region:us",
+                "medical"
+              ],
+              "readme": "---\ndataset_info:\n  features:\n  - name: answer\n    dtype: string\n  - name: options\n    dtype: string\n  - name: meta_info\n    dtype: string\n  - name: answer_idx\n    dtype: string\n  - name: metamap_phrases\n    dtype: string\n  - name: question\n    dtype: string\n  splits:\n  - name: test\n    num_bytes: 1870599\n    num_examples: 1221\n  - name: incomplete\n    num_bytes: 70746\n    num_examples: 52\n  download_size: 1086096\n  dataset_size: 1941345\nconfigs:\n- config_name: default\n  data_files:\n  - split: test\n    path: data/test-*\n  - split: incomplete\n    path: data/incomplete-*\nlicense: cc-by-4.0\ntask_categories:\n- question-answering\nlanguage:\n- en\ntags:\n- medical\n---\n# MedQA-USMLE-4-options-clean Dataset\n\n## Overview\nMedQA-USMLE-4-options-clean is an enhanced medical question-answering benchmark that builds upon the MedQA-USMLE dataset. Physicians analyzed the 1373 questions in the original dataset and moved 52 questions that were either malformed or incomplete to another split `incomplete`.\n\n## Key Features\n- Relabeled malformed/incorrect questions\n\n## Dataset Details\n- **Size**: 1373\n- **Language**: English\n\n## Data Source\n- [MedQA-USMLE](https://huggingface.co/datasets/GBaker/MedQA-USMLE-4-options) dataset\n\n## Task Description\nThe dataset is designed for multiple-choice medical question answering, with a focus on:\n1. Clinical knowledge assessment\n\n## Citation\nIf you use this dataset in your research, please cite:\n\n```\n\n```",
+              "extracted_code": ""
+            },
+            {
+              "id": "LLMcompe-Team-Watanabe/MedQA-USMLE-4-options_preprocess",
+              "author": "LLMcompe-Team-Watanabe",
+              "sha": "14857b60247c4d3d06ab07c5a418ecfe84636766",
+              "created_at": "2025-08-02T06:58:43+00:00",
+              "last_modified": "2025-08-07T17:37:55+00:00",
+              "private": false,
+              "gated": false,
+              "disabled": false,
+              "downloads": 33,
+              "likes": 0,
+              "siblings": [
+                {
+                  "rfilename": ".gitattributes"
+                },
+                {
+                  "rfilename": "README.md"
+                },
+                {
+                  "rfilename": "data/solve-00000-of-00001.parquet"
+                },
+                {
+                  "rfilename": "data/unsolve-00000-of-00001.parquet"
+                }
+              ],
+              "card_data": {
+                "license": [
+                  "apache-2.0"
+                ],
+                "language": [
+                  "en"
+                ],
+                "tags": [
+                  "medical",
+                  "usmle",
+                  "multiple-choice",
+                  "reasoning"
+                ],
+                "datasets": [],
+                "task_categories": [
+                  "question-answering"
+                ],
+                "size_categories": [],
+                "metrics": [],
+                "widget": []
+              },
+              "tags": [
+                "task_categories:question-answering",
+                "annotations_creators:expert-generated",
+                "language_creators:found",
+                "multilinguality:monolingual",
+                "language:en",
+                "license:apache-2.0",
+                "size_categories:10K<n<100K",
+                "format:parquet",
+                "modality:text",
+                "library:datasets",
+                "library:pandas",
+                "library:mlcroissant",
+                "library:polars",
+                "region:us",
+                "medical",
+                "usmle",
+                "multiple-choice",
+                "reasoning"
+              ],
+              "readme": "---\r\n# Dataset metadata\r\nannotations_creators:\r\n  - expert-generated\r\nlanguage_creators:\r\n  - found\r\nlanguage:\r\n  - en\r\nlicense:\r\n  - apache-2.0\r\nmultilinguality:\r\n  - monolingual\r\npretty_name: MedQA-USMLE Preprocessed\r\nhomepage: \"https://huggingface.co/datasets/GBaker/MedQA-USMLE-4-options\"\r\ntags:\r\n  - medical\r\n  - usmle\r\n  - multiple-choice\r\n  - reasoning\r\ntask_categories:\r\n  - question-answering\r\nconfigs:\r\n- config_name: default\r\n  data_files:\r\n  - split: solve\r\n    path: \"data/solve-*.parquet\"\r\n  - split: unsolve\r\n    path: \"data/unsolve-*.parquet\"\r\n---\r\n\r\n# MedQA-USMLE Preprocessed Dataset\r\n\r\nThis dataset is a preprocessed version of [GBaker/MedQA-USMLE-4-options](https://huggingface.co/datasets/GBaker/MedQA-USMLE-4-options).\r\n\r\nThe data has been formatted into a `question` and `answer` structure suitable for training or evaluating instruction-following language models.\r\n\r\n## Data Structure\r\n\r\n- `question`: The original medical question combined with the four multiple-choice options.\r\n- `answer`: The correct answer index, prefixed with `####`.\r\n\r\n### Example\r\n\r\n**Question:**\r\n```\r\nA 60-year-old woman comes to the emergency department because of a 3-day history of fever, chills, and a productive cough. She has a 40-pack-year history of smoking. Her temperature is 38.5°C (101.3°F), blood pressure is 130/80 mm Hg, pulse is 100/min, and respirations are 22/min. Physical examination shows crackles in the left lower lung field. A chest x-ray shows consolidation in the left lower lobe. Which of the following is the most likely causative organism?\r\n\r\nA) Streptococcus pneumoniae\r\nB) Mycoplasma pneumoniae\r\nC) Legionella pneumophila\r\nD) Klebsiella pneumoniae\r\n```\r\n\r\n**Answer:**\r\n```\r\n#### A\r\n```\r\n\r\n## Splits\r\n\r\nThe original `train`, `test`, and `validation` splits are preserved.\r\n\r\n## How to Use\r\n\r\n```python\r\nfrom datasets import load_dataset\r\n\r\nds = load_dataset(\"daichira/MedQA-USMLE-4-options_preprocess\", split=\"train\")\r\nprint(ds[0])\r\n```\r\n\r\n## Original Dataset\r\n\r\nFor more information, please refer to the original dataset card at [GBaker/MedQA-USMLE-4-options](https://huggingface.co/datasets/GBaker/MedQA-USMLE-4-options).\r\n",
+              "extracted_code": "from datasets import load_dataset\n\nds = load_dataset(\"daichira/MedQA-USMLE-4-options_preprocess\", split=\"train\")\nprint(ds[0])"
+            }
+          ]
+        }
+      }
     }
   },
   "idea_info_history": [
