@@ -28,7 +28,7 @@ def plot_training(log, fig_path):
 def evaluate(json_log, description):
     log = _load(json_log)
     log_path = Path(json_log)
-    image_dir = Path('.research/iteration3/images')
+    image_dir = Path('.research/iteration4/images')
     image_dir.mkdir(parents=True, exist_ok=True)
     fig_path = image_dir / log_path.with_suffix(".pdf").name
     plot_training(log, fig_path)

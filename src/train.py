@@ -75,7 +75,7 @@ class Trainer:
         self.batch, self.grad_accum = cfg["batch_size"], cfg["grad_accum"]
         self.run_name = run_name
         self.log = defaultdict(list)
-        self.out_dir = Path(".research/iteration3") / run_name
+        self.out_dir = Path(".research/iteration4") / run_name
         self.out_dir.mkdir(parents=True, exist_ok=True)
 
     # -----------------------------------------
