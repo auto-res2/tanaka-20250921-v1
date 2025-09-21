@@ -5,7 +5,7 @@ Extract all information related to the experimental results from the standard ou
 Do not extract unnecessary execution logs or information about Python package installations.
 
 # Standard Output
-=== [PHASE 2/2] Full experiment start Sun Sep 21 02:21:20 PM UTC 2025 ===
+=== [PHASE 2/2] Full experiment start Sun Sep 21 03:41:53 PM UTC 2025 ===
 --- Running Full Experiment ---
 Loading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt
 Downloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …
@@ -22,6 +22,6 @@ Pairs kept for GBaker/MedQA-USMLE-4-options: 10154
 
 Output:
 {
-    "extracted_output": "=== [PHASE 2/2] Full experiment start Sun Sep 21 02:21:20 PM UTC 2025 ===\n--- Running Full Experiment ---\nLoading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt\nDownloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …\nPairs kept for HuggingFaceH4/ultrafeedback_binarized: 24621\nDownloading argilla/ultrafeedback-binarized-preferences-cleaned [train] …\nPairs kept for argilla/ultrafeedback-binarized-preferences-cleaned: 23315\nDownloading Baidicoot/anthropic-harmless-rlhf [train] …\nPairs kept for Baidicoot/anthropic-harmless-rlhf: 40851\nDownloading GBaker/MedQA-USMLE-4-options [train] …\nPairs kept for GBaker/MedQA-USMLE-4-options: 10154",
+    "extracted_output": "=== [PHASE 2/2] Full experiment start Sun Sep 21 03:41:53 PM UTC 2025 ===\n--- Running Full Experiment ---\nLoading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt\nDownloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …\nPairs kept for HuggingFaceH4/ultrafeedback_binarized: 24621\nDownloading argilla/ultrafeedback-binarized-preferences-cleaned [train] …\nPairs kept for argilla/ultrafeedback-binarized-preferences-cleaned: 23315\nDownloading Baidicoot/anthropic-harmless-rlhf [train] …\nPairs kept for Baidicoot/anthropic-harmless-rlhf: 40851\nDownloading GBaker/MedQA-USMLE-4-options [train] …\nPairs kept for GBaker/MedQA-USMLE-4-options: 10154",
     "extracted_error": ""
 }
