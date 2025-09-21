@@ -9,7 +9,7 @@ batch_size: 8
 grad_accum: 1
 val_interval: 32
 datasets:
-  - name: "tatsu-lab/alpaca_farm"
-    split: "sft"
+  - name: "HuggingFaceH4/ultrafeedback_binarized"
+    split: "train_sft"
     max_len: 128
     limit: 100

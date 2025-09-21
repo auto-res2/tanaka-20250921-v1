@@ -6,8 +6,9 @@ import torch, torch.nn as nn, torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from transformers import (
     AutoModelForCausalLM, AutoTokenizer,
-    AdamW, get_cosine_schedule_with_warmup
+    get_cosine_schedule_with_warmup
 )
+from torch.optim import AdamW
 from tqdm import tqdm
 
 from src.preprocess import prepare_dataset, RewardModelEntropy
@@ -43,7 +44,7 @@ class C3POLoss(nn.Module):
         beta_i = self.mlp(feats).squeeze(-1).clamp(self.beta_min, self.beta_max)
         # ρ_i   (policy advantage vs reference)
         rho = (ll_c - ll_r) - (ll_ref_c - ll_ref_r)   # [B]
-        loss = -F.logsigmoid(beta_i.detach() * rho).mean()
+        loss = -F.logsigmoid(beta_i * rho).mean()
 
         # KL for the batch  (reference → policy, symmetric across pair)
         kl_batch = 0.5 * (ll_c - ll_ref_c + ll_r - ll_ref_r).mean()
@@ -54,11 +55,12 @@ class C3POLoss(nn.Module):
 class Trainer:
     def __init__(self, cfg, run_name):
         self.cfg = cfg
-        self.device = torch.device("cuda:0")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(cfg["model_name"], use_fast=True)
         self.tokenizer.pad_token = self.tokenizer.eos_token
+        dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
         self.model = AutoModelForCausalLM.from_pretrained(
-            cfg["model_name"], torch_dtype=torch.bfloat16).to(self.device)
+            cfg["model_name"], torch_dtype=dtype).to(self.device)
         # frozen reference
         self.ref_model = copy.deepcopy(self.model).eval().requires_grad_(False)
         self.loss_fn = C3POLoss(feat_dim=4, hidden=16,
@@ -73,7 +75,7 @@ class Trainer:
         self.batch, self.grad_accum = cfg["batch_size"], cfg["grad_accum"]
         self.run_name = run_name
         self.log = defaultdict(list)
-        self.out_dir = Path(".research/iteration1") / run_name
+        self.out_dir = Path(".research/iteration2") / run_name
         self.out_dir.mkdir(parents=True, exist_ok=True)
 
     # -----------------------------------------
@@ -182,6 +184,7 @@ def run(cfg, run_name):
         rm_entropy = None
 
     tokenizer = AutoTokenizer.from_pretrained(cfg["model_name"])
+    tokenizer.pad_token = tokenizer.eos_token
 
     datasets = []
     for i, dcfg in enumerate(cfg["datasets"]):

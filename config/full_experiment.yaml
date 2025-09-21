@@ -10,7 +10,7 @@ batch_size: 32 # Reduced to fit A100-80GB with 1.4B model
 grad_accum: 16 # Increased to maintain effective batch size of 512
 val_interval: 200
 datasets:
-  - {name: "tatsu-lab/alpaca_farm", split: "sft", max_len: 512}
+  - {name: "HuggingFaceH4/ultrafeedback_binarized", split: "train_sft", max_len: 512}
   - {name: "HuggingFaceH4/ultrafeedback_binarized", split: "train_prefs", max_len: 512}
   - {name: "argilla/ultrafeedback-binarized-preferences-cleaned", split: "train", max_len: 512}
   - {name: "Baidicoot/anthropic-harmless-rlhf", split: "train", max_len: 512}
