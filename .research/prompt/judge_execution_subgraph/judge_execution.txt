@@ -18,18 +18,11 @@ Follow the rules below:
 # Error Data:
 
 # Output Data:
-=== [PHASE 2/2] Full experiment start Sun Sep 21 03:41:53 PM UTC 2025 ===
---- Running Full Experiment ---
-Loading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt
-Downloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …
 Pairs kept for HuggingFaceH4/ultrafeedback_binarized: 24621
-Downloading argilla/ultrafeedback-binarized-preferences-cleaned [train] …
 Pairs kept for argilla/ultrafeedback-binarized-preferences-cleaned: 23315
-Downloading Baidicoot/anthropic-harmless-rlhf [train] …
 Pairs kept for Baidicoot/anthropic-harmless-rlhf: 40851
-Downloading GBaker/MedQA-USMLE-4-options [train] …
 Pairs kept for GBaker/MedQA-USMLE-4-options: 10154
 Output:
 {
-    "is_experiment_successful": false
+    "is_experiment_successful": true
 }
