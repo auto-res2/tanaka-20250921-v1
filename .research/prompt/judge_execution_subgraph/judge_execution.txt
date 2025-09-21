@@ -18,7 +18,7 @@ Follow the rules below:
 # Error Data:
 
 # Output Data:
-=== [PHASE 2/2] Full experiment start Sun Sep 21 12:57:10 PM UTC 2025 ===
+=== [PHASE 2/2] Full experiment start Sun Sep 21 02:21:20 PM UTC 2025 ===
 --- Running Full Experiment ---
 Loading cached dataset from data/cache/HuggingFaceH4_ultrafeedback_binarized_train_sft.pt
 Downloading HuggingFaceH4/ultrafeedback_binarized [train_prefs] …
