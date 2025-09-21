@@ -1,0 +1,15 @@
+description: >
+  Smoke-test: 1 seed, Pythia-160M, AlpacaFarm only, 100 pairs, 64 steps.
+model_name: "EleutherAI/pythia-160m"
+seed: 42
+lr: 1.0e-5
+warmup: 10
+max_steps: 64
+batch_size: 8
+grad_accum: 1
+val_interval: 32
+datasets:
+  - name: "tatsu-lab/alpaca_farm"
+    split: "sft"
+    max_len: 128
+    limit: 100
