@@ -1,0 +1,17 @@
+
+Input:
+# Task
+You carefully read the contents of the “Paper Outline” and select one GitHub link from the “GitHub URLs List” that you think is most relevant to the contents.
+# Constraints
+- Output the index number corresponding to the selected GitHub URL.
+- Be sure to select only one GitHub URL.
+- If there is no related GitHub link, output None.
+# Paper Outline
+The study categorizes preference fine-tuning methods (e.g., supervised learning, contrastive training like DPO/IPO, on-policy RL like PPO/REINFORCE) based on three axes: on-policy sampling, on-policy sample reuse, and the presence of a negative gradient. It utilizes a unified algorithmic framework (Algorithm 1) to systematically vary these characteristics. The fine-tuning goal is a KL-constrained reward optimization, assuming an underlying ground truth reward function (Bradley-Terry model). Reward models are learned explicitly or implicitly (as in DPO). Theoretical analysis contrasts the learning dynamics of mode-seeking objectives (reverse KL-divergence, on-policy RL, contrastive methods) against mode-covering objectives (forward KL-divergence, supervised maximum likelihood methods) for categorical distributions.
+
+# GitHub URLs List
+['https://github.com/ContextualAI/HALOs', 'https://github.com/karpathy/minGPT']
+Output:
+{
+    "index": 0
+}
