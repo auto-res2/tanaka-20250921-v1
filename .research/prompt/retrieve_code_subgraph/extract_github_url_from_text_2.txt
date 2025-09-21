@@ -1,0 +1,17 @@
+
+Input:
+# Task
+You carefully read the contents of the “Paper Outline” and select one GitHub link from the “GitHub URLs List” that you think is most relevant to the contents.
+# Constraints
+- Output the index number corresponding to the selected GitHub URL.
+- Be sure to select only one GitHub URL.
+- If there is no related GitHub link, output None.
+# Paper Outline
+The core methodology is an LLM-driven objective discovery pipeline. It iteratively prompts an LLM (GPT-4) to propose new preference optimization loss functions in PyTorch code. These proposals are based on a problem description and in-context examples of previously evaluated loss functions and their performance metrics (e.g., MT-Bench scores). Each proposed objective function undergoes unit testing for validity, is then used to fine-tune an LLM, and evaluated on a predefined downstream task. The resulting performance metric is fed back to the LLM to refine its subsequent proposals. This process aims to discover general-purpose objective functions. The preference optimization task itself is framed as an offline supervised learning problem, minimizing a scalar loss function `f` over the log ratio difference `ρ` of policy and reference model likelihoods for chosen and rejected completions.
+
+# GitHub URLs List
+['https://github.com/luchris429/DiscoPOP', 'https://github.com/tatsu-lab/alpaca_eval', 'https://github.com/tatsu-lab/alpaca_eval', 'https://github.com/vanderschaarlab/DiscoPOP', 'https://github.com/lm-sys/FastChat', 'https://github.com/tatsu-lab/alpaca_eval']
+Output:
+{
+    "index": 4
+}
